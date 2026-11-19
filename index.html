@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en" data-theme="classic" data-layout="paper" data-mode="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Progressive Pomodoro</title>
+<style>
+  /* ---------- Themes ----------
+     Every theme sets the same tokens. data-layout (paper, notebook, postcard, mac, win95,
+     terminal, window, glass) changes the window chrome. The break phase only swaps head, LCD and accent. */
+
+  :root[data-theme=classic] {               /* light · paper */
+    --head:#2c4a6e; --headtext:#fff; --lcd:#9be37a; --accent:#2c4a6e;
+    --brk-head:#3f6b4a; --brk-lcd:#ffcf70; --brk-accent:#3f6b4a;
+    --bg:#efe8d6; --pattern:repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.025) 3px 4px);
+    --page:#fbf8ef; --edge:#9c9378; --pageshadow:3px 3px 0 #cfc6aa; --radius:0px;
+    --nav:#e3dbc3; --text:#2a2a2a; --mute:#5a5340; --faint:#8a826a; --line:#b5ac90; --field:#fff; --fieldedge:#d9d1b8;
+    --btn:#e8e2cf; --btnlite:#f6f1e0; --btnon:#d4ccb0; --lcdbg:#101410; --hi:#fff6c9; --glow:none;
+    --titlebg:#2c4a6e; --titletext:#fff;
+    --body:Verdana,Geneva,sans-serif; --display:Georgia,"Times New Roman",serif; --mono:"Lucida Console","Courier New",monospace; --note:Georgia,serif; }
+
+  :root[data-theme=sakura] {                /* light · notebook */
+    --head:linear-gradient(90deg,#f7b6c8,#f2d4e0); --headtext:#6b2d48; --lcd:#ffd6e4; --accent:#c2557a;
+    --brk-head:linear-gradient(90deg,#bfe8cf,#d9f5e4); --brk-lcd:#e8fff0; --brk-accent:#3f8f66;
+    --bg:#fdf1f4; --pattern:none; --page:#fffafb; --edge:#e8b3c3; --pageshadow:0 12px 30px -14px rgba(194,85,122,.45); --radius:18px;
+    --nav:#fbe3ea; --text:#5b3446; --mute:#94637a; --faint:#c08aa0; --line:#f0c4d2; --field:#fff; --fieldedge:#f0c4d2;
+    --btn:#fbe3ea; --btnlite:#fff; --btnon:#f5cbd9; --lcdbg:#4a2a3a; --hi:#ffe0ea; --glow:none;
+    --titlebg:#f7b6c8; --titletext:#6b2d48;
+    --body:"Trebuchet MS",sans-serif; --display:Georgia,serif; --mono:"Courier New",monospace; --note:Georgia,serif; }
+
+  :root[data-theme=espresso] {              /* light · paper, typewriter feel */
+    --head:#4b2e1e; --headtext:#f5e6d3; --lcd:#ffd28a; --accent:#8b5a2b;
+    --brk-head:#2f4a3a; --brk-lcd:#ffd28a; --brk-accent:#5f8f6b;
+    --bg:#e9dccb; --pattern:none; --page:#f7efe3; --edge:#a08060; --pageshadow:4px 4px 0 #c9b59a; --radius:2px;
+    --nav:#e2d2bb; --text:#3b2a1e; --mute:#6e5846; --faint:#9a8065; --line:#c4ab8c; --field:#fffaf2; --fieldedge:#cdb596;
+    --btn:#e6d5bd; --btnlite:#f8efe2; --btnon:#d6c2a4; --lcdbg:#2a1c12; --hi:#f1e0c4; --glow:none;
+    --titlebg:#4b2e1e; --titletext:#f5e6d3;
+    --body:Georgia,serif; --display:Georgia,serif; --mono:"Courier New",monospace; --note:Georgia,serif; }
+
+  :root[data-theme=ocean] {                 /* light · postcard */
+    --head:linear-gradient(135deg,#1c6e8c,#3aa6b9); --headtext:#fff; --lcd:#e0fbff; --accent:#1c6e8c;
+    --brk-head:#d9703f; --brk-lcd:#ffe8a3; --brk-accent:#d9703f;
+    --bg:#cfe9ec; --pattern:none; --page:#fdfefe; --edge:#7fb8c4; --pageshadow:6px 6px 0 #9cd0d8; --radius:0px;
+    --nav:#e3f3f5; --text:#1e3a44; --mute:#4f7682; --faint:#7fa3ad; --line:#b5d7de; --field:#fff; --fieldedge:#b5d7de;
+    --btn:#dff1f4; --btnlite:#fff; --btnon:#bfe2e9; --lcdbg:#0b2f38; --hi:#d4f0f4; --glow:none;
+    --titlebg:#1c6e8c; --titletext:#fff;
+    --body:Verdana,Geneva,sans-serif; --display:"Trebuchet MS",sans-serif; --mono:"Courier New",monospace; --note:"Trebuchet MS",sans-serif; }
+
+  :root[data-theme=platinum] {              /* light · Mac OS 9 platinum window */
+    --head:linear-gradient(#f4f4f4 0 2px,#bdbdbd 2px 3px); --headtext:#000; --lcd:#a8ff9e; --accent:#3366cc;
+    --brk-head:linear-gradient(#ffe3b8 0 2px,#f5b56b 2px 3px); --brk-lcd:#ffd27a; --brk-accent:#cc6600;
+    --bg:#6b8fa3; --pattern:radial-gradient(rgba(255,255,255,.13) 1px, transparent 1px) 0 0/4px 4px;
+    --page:#eeeeee; --edge:#333; --pageshadow:4px 4px 0 rgba(0,0,0,.35); --radius:0px;
+    --nav:#d8d8d8; --text:#111; --mute:#444; --faint:#777; --line:#aaa; --field:#fff; --fieldedge:#888;
+    --btn:#e4e4e4; --btnlite:#fff; --btnon:#bdbdbd; --lcdbg:#1b2b1b; --hi:#fff3a0; --glow:none;
+    --titlebg:repeating-linear-gradient(#f4f4f4 0 2px,#999 2px 3px); --titletext:#000;
+    --body:"Lucida Grande",Verdana,sans-serif; --display:"Lucida Grande",Verdana,sans-serif; --mono:Monaco,"Courier New",monospace; --note:Verdana,sans-serif; }
+
+  :root[data-theme=win95] {                 /* light · Windows 95 */
+    --head:#000080; --headtext:#fff; --lcd:#ffff66; --accent:#000080;
+    --brk-head:#800000; --brk-lcd:#fff; --brk-accent:#800000;
+    --bg:#008080; --pattern:none; --page:#c0c0c0; --edge:#808080; --pageshadow:none; --radius:0px;
+    --nav:#c0c0c0; --text:#000; --mute:#404040; --faint:#808080; --line:#808080; --field:#fff; --fieldedge:#808080;
+    --btn:#c0c0c0; --btnlite:#fff; --btnon:#a0a0a0; --lcdbg:#000; --hi:#ffff99; --glow:none;
+    --titlebg:linear-gradient(90deg,#000080,#1084d0); --titletext:#fff;
+    --body:Tahoma,"MS Sans Serif",Arial,sans-serif; --display:Tahoma,"MS Sans Serif",Arial,sans-serif; --mono:"Courier New",monospace; --note:Tahoma,sans-serif; }
+
+  :root[data-theme=midnight] {              /* dark · paper */
+    --head:#1f3350; --headtext:#fff; --lcd:#9be37a; --accent:#8db4e6;
+    --brk-head:#2b4a33; --brk-lcd:#ffcf70; --brk-accent:#8fd1a0;
+    --bg:#161512; --pattern:repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,255,255,.02) 3px 4px);
+    --page:#24221d; --edge:#5c5644; --pageshadow:3px 3px 0 #0c0b09; --radius:0px;
+    --nav:#2e2b24; --text:#ddd6c3; --mute:#aaa28a; --faint:#7d7762; --line:#4a4536; --field:#17160f; --fieldedge:#4a4536;
+    --btn:#37332a; --btnlite:#4f4a3c; --btnon:#26231c; --lcdbg:#080a08; --hi:#3a3516; --glow:none;
+    --titlebg:#1f3350; --titletext:#ddd6c3;
+    --body:Verdana,Geneva,sans-serif; --display:Georgia,"Times New Roman",serif; --mono:"Lucida Console","Courier New",monospace; --note:Georgia,serif; }
+
+  :root[data-theme=forest] {                /* dark · paper, old-book serif */
+    --head:#2f4a2a; --headtext:#eee6c8; --lcd:#f2c46d; --accent:#8fb76a;
+    --brk-head:#6b4424; --brk-lcd:#b8f08a; --brk-accent:#d08a4e;
+    --bg:#1d2418; --pattern:repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,255,255,.015) 3px 4px);
+    --page:#283122; --edge:#4d5a3c; --pageshadow:0 0 0 4px #161c12; --radius:4px;
+    --nav:#323c2a; --text:#e6dcc0; --mute:#b5ab86; --faint:#857c5c; --line:#4f5a40; --field:#1d2318; --fieldedge:#4f5a40;
+    --btn:#3b4630; --btnlite:#556244; --btnon:#222a1a; --lcdbg:#10140c; --hi:#41472e; --glow:none;
+    --titlebg:#2f4a2a; --titletext:#eee6c8;
+    --body:"Palatino Linotype",Palatino,"Book Antiqua",serif; --display:"Palatino Linotype",Palatino,serif; --mono:"Courier New",monospace; --note:"Palatino Linotype",Palatino,serif; }
+
+  :root[data-theme=retro] {                 /* dark · terminal with scanlines */
+    --head:#021a0a; --headtext:#33ff66; --lcd:#33ff66; --accent:#33ff66;
+    --brk-head:#1a1400; --brk-lcd:#ffb000; --brk-accent:#ffb000;
+    --bg:#000; --pattern:none; --page:#040f06; --edge:#1f7a33; --pageshadow:0 0 22px rgba(51,255,102,.22); --radius:0px;
+    --nav:#061a0c; --text:#7cff9e; --mute:#3fb35e; --faint:#2a7d43; --line:#1f5a31; --field:#020a04; --fieldedge:#1f5a31;
+    --btn:#0b2412; --btnlite:#1f5a31; --btnon:#04140a; --lcdbg:#000; --hi:#0f3a1c; --glow:0 0 8px rgba(51,255,102,.7);
+    --titlebg:#021a0a; --titletext:#33ff66;
+    --body:"Courier New",Courier,monospace; --display:"Courier New",Courier,monospace; --mono:"Courier New",Courier,monospace; --note:"Courier New",Courier,monospace; }
+
+  :root[data-theme=synth] {                 /* dark · neon window */
+    --head:linear-gradient(90deg,#ff2e88,#7b2ff7); --headtext:#fff; --lcd:#36f9f6; --accent:#ff2e88;
+    --brk-head:linear-gradient(90deg,#0a7ea4,#1aa7b0); --brk-lcd:#ffe66d; --brk-accent:#36f9f6;
+    --bg:#1a0b2e; --pattern:none; --page:#241243; --edge:#ff2e88; --pageshadow:0 0 28px rgba(255,46,136,.35); --radius:10px;
+    --nav:#2d1656; --text:#f4e9ff; --mute:#c3a6e8; --faint:#8a6bb3; --line:#4a2a7a; --field:#160a2b; --fieldedge:#6b3aa8;
+    --btn:#3a1b6b; --btnlite:#5b2fa0; --btnon:#22103f; --lcdbg:#0d0520; --hi:#4a1f5c; --glow:0 0 10px rgba(54,249,246,.7);
+    --titlebg:#160829; --titletext:#36f9f6;
+    --body:"Trebuchet MS",sans-serif; --display:"Trebuchet MS",sans-serif; --mono:"Courier New",monospace; --note:"Trebuchet MS",sans-serif; }
+
+  :root[data-theme=lofi] {                  /* dark · warm lamp-lit window */
+    --head:#3b2a20; --headtext:#ffd9a0; --lcd:#ffb86b; --accent:#e0a060;
+    --brk-head:#2c3d3a; --brk-lcd:#9fe0d0; --brk-accent:#7fd1c0;
+    --bg:#17110d; --pattern:radial-gradient(rgba(255,200,120,.06) 1px, transparent 1px) 0 0/22px 22px;
+    --page:#231b15; --edge:#4a3a2c; --pageshadow:0 20px 50px -20px rgba(0,0,0,.8); --radius:14px;
+    --nav:#2c2219; --text:#efd9b8; --mute:#b89f7e; --faint:#8a7356; --line:#4a3a2c; --field:#1a130e; --fieldedge:#4a3a2c;
+    --btn:#35291e; --btnlite:#4a3b2c; --btnon:#1e1710; --lcdbg:#0d0906; --hi:#4a3a10; --glow:0 0 12px rgba(255,184,107,.45);
+    --titlebg:#2c2219; --titletext:#d9b98a;
+    --body:"Gill Sans","Trebuchet MS",sans-serif; --display:Georgia,serif; --mono:"Courier New",monospace; --note:Georgia,serif; }
+
+  :root[data-theme=glass] {                 /* dark · frosted glass over gradient */
+    --head:rgba(255,255,255,.12); --headtext:#fff; --lcd:#b9f5ff; --accent:#a78bfa;
+    --brk-head:rgba(52,211,153,.25); --brk-lcd:#bbf7d0; --brk-accent:#34d399;
+    --bg:radial-gradient(circle at 15% 20%, #7c3aed 0, transparent 45%), radial-gradient(circle at 85% 75%, #ec4899 0, transparent 45%), radial-gradient(circle at 60% 10%, #06b6d4 0, transparent 35%), #0b0820;
+    --pattern:none; --page:rgba(20,16,40,.45); --edge:rgba(255,255,255,.14); --pageshadow:0 30px 60px -20px rgba(0,0,0,.6); --radius:22px;
+    --nav:rgba(255,255,255,.05); --text:#f1ecff; --mute:#b8b0d6; --faint:#8c84b0; --line:rgba(255,255,255,.12); --field:rgba(0,0,0,.25); --fieldedge:rgba(255,255,255,.15);
+    --btn:rgba(255,255,255,.08); --btnlite:rgba(255,255,255,.18); --btnon:rgba(255,255,255,.22); --lcdbg:rgba(0,0,0,.45); --hi:rgba(167,139,250,.25); --glow:0 0 14px rgba(185,245,255,.5);
+    --titlebg:rgba(255,255,255,.06); --titletext:#f1ecff;
+    --body:"Segoe UI",Inter,system-ui,sans-serif; --display:"Segoe UI",Inter,system-ui,sans-serif; --mono:ui-monospace,"Courier New",monospace; --note:"Segoe UI",Inter,system-ui,sans-serif; }
+
+  body.break { --head:var(--brk-head); --lcd:var(--brk-lcd); --accent:var(--brk-accent); }
+
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; padding:18px 10px 30px; color:var(--text); background:var(--pattern), var(--bg);
+         font-family:var(--body); font-size:13px; line-height:1.55; }
+  #page { position:relative; max-width:560px; margin:0 auto; background:var(--page); border:1px solid var(--edge);
+          box-shadow:var(--pageshadow); border-radius:var(--radius); overflow:hidden; }
+
+  /* ---------- Window chrome (shown only by some layouts) ---------- */
+  #chrome { display:none; align-items:center; gap:8px; padding:6px 10px; background:var(--titlebg); color:var(--titletext);
+            font:11px var(--body); border-bottom:1px solid var(--edge); }
+  #chrome .dots i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; background:#ff5f57; }
+  #chrome .dots i:nth-child(2) { background:#febc2e; } #chrome .dots i:nth-child(3) { background:#28c840; }
+  #chrome #wtitle { flex:1; text-align:center; letter-spacing:.04em; }
+  #chrome .wbtns { display:none; }
+  [data-layout=window] #chrome, [data-layout=glass] #chrome { display:flex; }
+  [data-layout=mac] #chrome { display:flex; justify-content:center; font:bold 12px var(--body); padding:5px 10px; border-bottom:2px solid #000; color:#000; }
+  [data-layout=win95] #chrome { display:flex; font:bold 12px var(--body); padding:3px 4px 3px 6px; }
+  [data-layout=win95] #chrome #wtitle { text-align:left; }
+  [data-layout=win95] #chrome .dots { display:none; }
+  [data-layout=win95] #chrome .wbtns { display:inline-block; font-weight:bold; color:#000; background:#c0c0c0; padding:0 6px; border:2px outset #fff; }
+  [data-layout=win95] #page { border:2px outset #dfdfdf; border-radius:0; }
+  [data-layout=mac] #page { border:2px solid #000; border-radius:0; }
+  [data-layout=terminal] #chrome { display:flex; background:transparent; border:0; color:var(--lcd); font:12px var(--mono); padding:12px 16px 0; }
+  [data-layout=terminal] #chrome .dots, [data-layout=terminal] #chrome .wbtns { display:none; }
+  [data-layout=terminal] #wtitle { text-align:left; }
+  [data-layout=terminal] #wtitle::before { content:"user@pomodoro:~$ "; color:var(--mute); }
+  [data-layout=terminal] #wtitle::after { content:"_"; animation:blink 1s steps(1) infinite; }
+  [data-layout=terminal] #page { border:1px solid var(--edge); }
+  [data-layout=terminal] body::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:9;
+        background:repeating-linear-gradient(0deg, rgba(0,0,0,.2) 0 1px, transparent 1px 3px); }
+  @keyframes blink { 50% { opacity:0; } }
+
+  /* Notebook: ruled paper with a pink margin */
+  [data-layout=notebook] #page { background-image:linear-gradient(90deg, transparent 44px, rgba(230,90,120,.45) 44px 45px, transparent 45px); }
+  [data-layout=notebook] textarea { line-height:24px; padding-top:4px; background-color:var(--field);
+        background-image:repeating-linear-gradient(transparent 0 23px, var(--line) 23px 24px); }
+  /* Postcard: dashed inner border and an air-mail stamp */
+  [data-layout=postcard] #page { outline:1px dashed var(--edge); outline-offset:-8px; }
+  [data-layout=postcard] nav::after { content:"AIR MAIL"; float:right; font:bold 9px var(--mono); letter-spacing:.2em; color:var(--mute);
+        border:1px dashed var(--mute); padding:0 5px; transform:rotate(4deg); }
+  /* Glass: frosted panel */
+  [data-layout=glass] #page { backdrop-filter:blur(18px) saturate(140%); -webkit-backdrop-filter:blur(18px) saturate(140%); }
+  [data-layout=glass] header { border-bottom:1px solid var(--line); }
+
+  /* ---------- Header and tools ---------- */
+  header { background:var(--head); color:var(--headtext); padding:12px 18px 14px; border-bottom:3px double var(--page); transition:background .6s; }
+  [data-layout=glass] header, [data-layout=glass] nav { border-bottom:1px solid var(--line); }
+  #tools { display:flex; justify-content:flex-end; align-items:center; gap:8px; margin-bottom:8px; }
+  .seg { display:inline-flex; }
+  .seg button { font:11px var(--body); padding:2px 9px; margin:0; border-radius:0; }
+  .seg button:first-child { border-radius:6px 0 0 6px; } .seg button:last-child { border-radius:0 6px 6px 0; }
+  .seg button.on { border-style:inset; background:var(--btnon); font-weight:bold; }
+  #theme { font:11px var(--body); color:var(--text); background:var(--field); border:1px solid var(--edge); border-radius:6px; padding:2px 4px; max-width:170px; }
+  header h1 { margin:0; font:italic 26px var(--display); letter-spacing:.5px; text-shadow:var(--glow); }
+  header p { margin:2px 0 0; font-size:11px; opacity:.8; }
+  nav { background:var(--nav); border-bottom:1px solid var(--edge); padding:4px 18px; font-size:11px; color:var(--mute); }
+  nav b, #goalnav { color:var(--accent); }
+  #goalnav { font-style:italic; }
+  .body { padding:14px 18px 6px; }
+  fieldset { border:1px solid var(--line); margin:0 0 14px; padding:10px 14px 12px; min-width:0; }
+  legend { font:bold 13px var(--display); color:var(--accent); padding:0 6px; }
+
+  /* ---------- Timer ---------- */
+  #lcd { background:var(--lcdbg); border:2px inset var(--faint); padding:10px 0 6px; text-align:center; }
+  #time { font:46px var(--mono); color:var(--lcd); letter-spacing:4px; transition:color .6s; text-shadow:var(--glow); }
+  #phase { font:11px var(--mono); color:var(--lcd); opacity:.7; letter-spacing:3px; text-transform:uppercase; }
+  #bar { height:12px; border:1px solid var(--faint); background:var(--field); margin:10px 0 6px; }
+  #fill { height:100%; width:0; background:var(--accent); transition:width .3s linear, background .6s; }
+  #plan { font-size:12px; color:var(--mute); }
+  #plan .done { text-decoration:line-through; opacity:.55; }
+  #plan .cur { font-weight:bold; color:var(--accent); }
+  .btns { margin-top:10px; text-align:center; }
+  .keys { font-size:10px; color:var(--faint); text-align:center; margin-top:6px; }
+
+  /* ---------- Controls ---------- */
+  button { font:12px var(--body); color:var(--text); background:var(--btn); border:2px outset var(--btnlite); border-radius:var(--radius-btn, 0);
+           padding:4px 14px; margin:0 3px; cursor:pointer; }
+  [data-layout=glass] button, [data-layout=window] button, [data-layout=synth] button { border-radius:8px; border-width:1px; }
+  button:active { border-style:inset; }
+  button.big { font-weight:bold; min-width:90px; }
+  button.on { border-style:inset; background:var(--btnon); font-weight:bold; }
+  input[type=number], input[type=text], textarea { font:12px var(--body); color:var(--text); border:2px inset var(--fieldedge); background:var(--field); padding:2px 4px; }
+  input[type=number] { width:64px; }
+  input[type=range] { width:170px; vertical-align:middle; accent-color:var(--accent); }
+  input[type=checkbox] { accent-color:var(--accent); }
+  label { font-size:11px; color:var(--mute); }
+  textarea { width:100%; box-sizing:border-box; resize:vertical; min-height:70px; font-family:var(--note); font-size:13px; }
+  #goal { width:100%; box-sizing:border-box; margin-bottom:8px; font-family:var(--note); font-size:13px; }
+  .sounds { margin:0 0 8px; }
+  .sounds button { margin:0 4px 6px 0; padding:3px 10px; }
+  .presets { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+  .presets button { font-size:11px; padding:3px 9px; margin:0; }
+  .grid6 { display:grid; grid-template-columns:repeat(3,1fr); gap:8px 12px; }
+  .grid6 input { width:100%; margin-top:3px; }
+  .checks { display:flex; gap:18px; margin-top:12px; flex-wrap:wrap; }
+  .checks label { font-size:11px; color:var(--mute); }
+  .checks input { vertical-align:middle; margin-right:4px; }
+  #yt { display:none; width:100%; aspect-ratio:16/9; border:2px inset var(--faint); margin-top:8px; }
+  .ytrow input[type=text] { width:calc(100% - 100px); }
+
+  /* ---------- Notes ---------- */
+  .notehead { font-size:11px; color:var(--mute); margin:0 0 4px; }
+  .notehead b { color:var(--accent); }
+  .day { font:bold 12px var(--display); color:var(--mute); border-bottom:1px dotted var(--line); margin:12px 0 6px; }
+  .entry { margin:0 0 8px; }
+  .entry .notehead { display:flex; justify-content:space-between; gap:8px; }
+  .entry textarea { min-height:44px; }
+  .entry .x { font-size:10px; padding:0 6px; margin:0; }
+  .empty { font-size:11px; color:var(--faint); font-style:italic; }
+  .tools { margin-top:8px; text-align:right; }
+
+  /* ---------- Week stats ---------- */
+  .bars { display:flex; align-items:flex-end; gap:6px; height:118px; margin:4px 0 2px; }
+  .col { flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:3px; height:100%; }
+  .col span { font:10px var(--mono); color:var(--mute); min-height:12px; }
+  .col i { display:block; width:100%; max-width:34px; background:var(--accent); opacity:.6; border-radius:3px 3px 0 0; min-height:2px; transition:height .4s; }
+  .col.today i { opacity:1; }
+  .col b { font-weight:normal; font-size:10px; color:var(--mute); }
+  .col.today b { color:var(--accent); font-weight:bold; }
+
+  footer { border-top:1px solid var(--line); background:var(--nav); padding:8px 18px; font-size:11px; color:var(--mute); text-align:center; }
+  #today { font:12px var(--mono); background:var(--lcdbg); color:var(--lcd); padding:1px 6px; border:1px inset var(--faint); }
+</style>
+</head>
+<body>
+<div id="page">
+  <div id="chrome">
+    <span class="dots"><i></i><i></i><i></i></span>
+    <span id="wtitle"></span>
+    <span class="wbtns">_ &#9633; &times;</span>
+  </div>
+
+  <header>
+    <div id="tools">
+      <div class="seg"><button data-mode="light">&#9728; Light</button><button data-mode="dark">&#9790; Dark</button></div>
+      <select id="theme" title="Choose a theme"></select>
+    </div>
+    <h1>The Progressive Pomodoro</h1>
+    <p>focus a little longer, every time.</p>
+  </header>
+  <nav><span id="where">Focus</span> &raquo; block <span id="blk">1</span> <span id="goalnav"></span></nav>
+
+  <div class="body">
+    <fieldset>
+      <legend>The Timer</legend>
+      <div id="lcd"><div id="time">10:00</div><div id="phase">focus</div></div>
+      <div id="bar"><div id="fill"></div></div>
+      <div id="plan"></div>
+      <div class="btns">
+        <button id="start" class="big">Start</button>
+        <button id="skip">Skip &raquo;</button>
+        <button id="reset">Reset</button>
+      </div>
+      <div class="keys">space = start/pause &middot; s = skip &middot; r = reset &middot; g = goal</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Notes</legend>
+      <input type="text" id="goal" placeholder="Goal for this block (e.g. draft the intro)">
+      <p class="notehead" id="notehead"></p>
+      <textarea id="curnote" placeholder="What are you working on? Jot down thoughts, distractions, next steps..."></textarea>
+      <div id="log"></div>
+      <div class="tools"><button id="copyNotes">Copy all as Markdown</button></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>This week</legend>
+      <div class="bars" id="bars"></div>
+      <p class="notehead" id="streak"></p>
+      <div class="tools"><button id="exp">Export data</button><button id="imp">Import</button><input type="file" id="impFile" accept="application/json" hidden></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Background Sounds</legend>
+      <div class="sounds" id="sounds"></div>
+      <label>Volume: <input type="range" id="vol" min="0" max="1" step="0.01" value="0.5"></label>
+      <div class="ytrow" style="margin-top:10px">
+        <label>YouTube link:</label><br>
+        <input type="text" id="ytUrl" placeholder="https://youtube.com/watch?v=...">
+        <button id="ytGo">Play</button><button id="ytStop">&times;</button>
+      </div>
+      <iframe id="yt" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </fieldset>
+
+    <fieldset>
+      <legend>Settings (minutes)</legend>
+      <div class="presets">
+        <button data-p="Classic">Classic 25/5</button>
+        <button data-p="Progressive">Progressive 10&rarr;25</button>
+        <button data-p="Deep">Deep 50/10</button>
+        <button data-p="Sprint">Sprint 15/3</button>
+      </div>
+      <div class="grid6">
+        <label>Start<input type="number" id="cfgStart" min="1" value="10"></label>
+        <label>Add each time<input type="number" id="cfgStep" min="0" value="5"></label>
+        <label>Max<input type="number" id="cfgMax" min="1" value="25"></label>
+        <label>Break<input type="number" id="cfgBreak" min="1" value="5"></label>
+        <label>Long break<input type="number" id="cfgLong" min="1" value="15"></label>
+        <label>Long every<input type="number" id="cfgEvery" min="1" value="4"></label>
+      </div>
+      <div class="checks">
+        <label><input type="checkbox" id="cfgAuto" checked>auto-start next phase</label>
+        <label><input type="checkbox" id="cfgChime" checked>chime when a phase ends</label>
+      </div>
+    </fieldset>
+  </div>
+
+  <footer>Minutes focused today: <span id="today">0</span><br>best viewed in any browser, with a cup of tea.</footer>
+</div>
+
+<script>
+// ---------- Helpers & storage ----------
+const $ = id => document.getElementById(id);
+const store = {
+  get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+const localDay = () => new Date().toLocaleDateString('sv');          // YYYY-MM-DD, local time
+const fmt = s => { s = Math.max(0, Math.ceil(s)); return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0'); };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hasContent = x => (x.text || '').trim() || (x.goal || '').trim();
+
+// ---------- Settings ----------
+const CFG_IDS = ['cfgStart','cfgStep','cfgMax','cfgBreak','cfgLong','cfgEvery'];
+const CHECK_IDS = ['cfgAuto','cfgChime'];
+const DEFAULTS = { cfgStart:10, cfgStep:5, cfgMax:25, cfgBreak:5, cfgLong:15, cfgEvery:4, cfgAuto:true, cfgChime:true };
+const savedCfg = store.get('pp-cfg', {});
+CFG_IDS.forEach(i => $(i).value = savedCfg[i] ?? DEFAULTS[i]);
+CHECK_IDS.forEach(i => $(i).checked = savedCfg[i] ?? DEFAULTS[i]);
+const cfg = () => ({ start:+$('cfgStart').value||10, step:+$('cfgStep').value||0, max:+$('cfgMax').value||25,
+  brk:+$('cfgBreak').value||5, long:+$('cfgLong').value||15, every:+$('cfgEvery').value||4,
+  auto:$('cfgAuto').checked, chime:$('cfgChime').checked });
+function saveCfg() { const o = {}; CFG_IDS.forEach(i => o[i] = $(i).value); CHECK_IDS.forEach(i => o[i] = $(i).checked); store.set('pp-cfg', o); }
+const PRESETS = { Classic:[25,0,25,5,15,4], Progressive:[10,5,25,5,15,4], Deep:[50,0,50,10,30,2], Sprint:[15,0,15,3,10,4] };
+
+function plan() {
+  const c = cfg(), out = []; let m = c.start;
+  for (let i = 0; i < 20; i++) { out.push(Math.min(m, c.max)); if (m >= c.max || !c.step) break; m += c.step; }
+  return out;
+}
+
+// ---------- Timer state (restored for the same day) ----------
+const savedState = store.get('pp-state', {});
+const sameDay = savedState.day === localDay();
+let idx = sameDay ? (savedState.idx || 0) : 0;
+let workDone = sameDay ? (savedState.workDone || 0) : 0;   // completed focus blocks today, drives long breaks
+let curId = sameDay ? (savedState.curId ?? null) : null;
+let phase = 'work', total = 0, remaining = 0, timer = null, endAt = 0;
+const saveState = () => store.set('pp-state', { day: localDay(), idx, workDone, curId });
+
+const isLongBreak = () => workDone > 0 && workDone % cfg().every === 0;
+const breakMins = () => isLongBreak() ? cfg().long : cfg().brk;
+
+function setPhase(p, keepNote) {
+  phase = p;
+  if (p === 'work' && !keepNote) startNoteBlock();
+  const lens = plan();
+  total = remaining = (p === 'work' ? lens[Math.min(idx, lens.length-1)] : breakMins()) * 60;
+  document.body.classList.toggle('break', p === 'break');
+  $('phase').textContent = p === 'work' ? 'focus' : (isLongBreak() ? 'long break' : 'break');
+  $('where').textContent = p === 'work' ? 'Focus' : (isLongBreak() ? 'Long break' : 'Break');
+  $('blk').textContent = idx + 1;
+  saveState(); noteHead(); render();
+}
+
+function render() {
+  $('time').textContent = fmt(remaining);
+  $('fill').style.width = (total ? (1 - remaining/total) * 100 : 0) + '%';
+  document.title = timer ? fmt(remaining) + ' - ' + $('where').textContent : 'The Progressive Pomodoro';
+  const lens = plan(), c = cfg();
+  $('plan').innerHTML = 'Plan: ' + lens.map((m, i) => {
+    const k = i < idx || (i === idx && phase === 'break') ? 'done' : i === idx ? 'cur' : '';
+    return `<span class="${k}">${m}m</span>`;
+  }).join(' &rsaquo; ') + ` &middot; break ${c.brk}m, long ${c.long}m every ${c.every}`;
+  $('start').textContent = timer ? 'Pause' : 'Start';
+  document.body.classList.toggle('running', !!timer);
+}
+
+function tick() { remaining = (endAt - Date.now()) / 1000; if (remaining <= 0) return finish(); render(); }
+
+function finish() {
+  stopTimer();
+  const c = cfg();
+  if (c.chime) chime();
+  if (phase === 'work') {
+    workDone++; addToday(total/60);
+    notify('Focus done', 'Take a ' + breakMins() + ' min break.');
+    setPhase('break');
+  } else {
+    idx = Math.min(idx + 1, plan().length - 1);
+    notify('Break over', 'Next focus: ' + plan()[idx] + ' min.');
+    setPhase('work');
+  }
+  if (c.auto) startTimer(); else render();
+}
+
+// Screen wake lock keeps the display on while the timer runs (where supported)
+let wake = null;
+async function keepAwake(on) {
+  try {
+    if (on && !wake && 'wakeLock' in navigator) {
+      wake = await navigator.wakeLock.request('screen');
+      wake.addEventListener('release', () => { wake = null; });
+    } else if (!on && wake) { const w = wake; wake = null; await w.release(); }
+  } catch {}
+}
+document.addEventListener('visibilitychange', () => { if (timer && document.visibilityState === 'visible') keepAwake(true); });
+
+function startTimer() { ensureAudio(); endAt = Date.now() + remaining * 1000; timer = setInterval(tick, 250); keepAwake(true); render(); }
+function stopTimer() { clearInterval(timer); timer = null; keepAwake(false); }
+
+const toggle = () => {
+  if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+  if (timer) { stopTimer(); render(); } else startTimer();
+};
+const skip = () => {
+  const was = !!timer; stopTimer();
+  if (phase === 'work') { workDone++; setPhase('break'); }
+  else { idx = Math.min(idx + 1, plan().length - 1); setPhase('work'); }
+  if (was) startTimer(); else render();
+};
+const reset = () => { stopTimer(); idx = 0; workDone = 0; setPhase('work'); };
+$('start').onclick = toggle; $('skip').onclick = skip; $('reset').onclick = reset;
+
+function onCfgChange() {
+  saveCfg();
+  if (!timer) { idx = Math.min(idx, plan().length - 1); setPhase(phase, true); } else render();
+}
+[...CFG_IDS, ...CHECK_IDS].forEach(i => $(i).onchange = onCfgChange);
+document.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+  const v = PRESETS[b.dataset.p];
+  CFG_IDS.forEach((i, k) => $(i).value = v[k]);
+  onCfgChange();
+});
+
+addEventListener('keydown', e => {
+  if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+  if (e.code === 'Space') { e.preventDefault(); toggle(); }
+  else if (e.key === 's') skip();
+  else if (e.key === 'r') reset();
+  else if (e.key === 'g') { e.preventDefault(); $('goal').focus(); }
+});
+
+function notify(t, b) { if ('Notification' in window && Notification.permission === 'granted') new Notification(t, { body: b }); }
+
+// ---------- Week stats ----------
+const todayKey = d => 'pp-day-' + (d || localDay());
+const minsOn = d => store.get(todayKey(d), 0);
+function addToday(min) { store.set(todayKey(), minsOn() + min); showToday(); renderWeek(); }
+function showToday() { $('today').textContent = String(Math.round(minsOn())).padStart(4, '0'); }
+
+function renderWeek() {
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    days.push({ key: d.toLocaleDateString('sv'), label: d.toLocaleDateString(undefined, { weekday:'short' }), today: i === 0 });
+  }
+  days.forEach(d => d.mins = Math.round(minsOn(d.key)));
+  const max = Math.max(60, ...days.map(d => d.mins));
+  $('bars').innerHTML = days.map(d =>
+    `<div class="col${d.today ? ' today' : ''}" title="${d.mins} min"><span>${d.mins || ''}</span>` +
+    `<i style="height:${Math.max(2, d.mins / max * 78)}px"></i><b>${d.label}</b></div>`).join('');
+  const total = days.reduce((s, d) => s + d.mins, 0);
+  let streak = 0;
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    if (minsOn(d.toLocaleDateString('sv')) > 0) streak++; else if (i > 0) break;
+  }
+  $('streak').innerHTML = `<b>${total}</b> min this week &middot; streak <b>${streak}</b> day${streak === 1 ? '' : 's'}`;
+}
+
+// Export / import everything the app stores (keys starting with pp-)
+$('exp').onclick = () => {
+  const out = {};
+  for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('pp-')) out[k] = localStorage.getItem(k); }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' }));
+  a.download = 'pomodoro-' + localDay() + '.json'; a.click();
+};
+$('imp').onclick = () => $('impFile').click();
+$('impFile').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const data = JSON.parse(await f.text());
+    if (!confirm('Import will overwrite matching settings and notes. Continue?')) return;
+    Object.entries(data).forEach(([k, v]) => { if (k.startsWith('pp-') && typeof v === 'string') localStorage.setItem(k, v); });
+    location.reload();
+  } catch { alert('That file is not a valid export.'); }
+};
+
+// ---------- Audio: soft, synthesized ----------
+let ac, master, current = null, currentName = null;
+const bufCache = {};
+
+function ensureAudio() {
+  if (!ac) {
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+    const comp = ac.createDynamicsCompressor(); comp.threshold.value = -24; comp.ratio.value = 4; comp.attack.value = .02; comp.release.value = .4;
+    const soft = ac.createBiquadFilter(); soft.type = 'lowpass'; soft.frequency.value = 7000; soft.Q.value = .5;
+    master = ac.createGain(); master.gain.value = +$('vol').value;
+    master.connect(soft); soft.connect(comp); comp.connect(ac.destination);
+  }
+  if (ac.state === 'suspended') ac.resume();
+}
+
+// 10 s stereo buffers, independent L/R so it sounds wide and not looped
+function noiseBuf(kind) {
+  if (bufCache[kind]) return bufCache[kind];
+  const len = ac.sampleRate * 10, b = ac.createBuffer(2, len, ac.sampleRate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = b.getChannelData(ch); let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0,last=0;
+    for (let i = 0; i < len; i++) {
+      const w = Math.random()*2-1;
+      if (kind === 'brown') { last = (last + .02*w)/1.02; d[i] = last*3.5; }
+      else { // pink (Paul Kellet)
+        b0=.99886*b0+w*.0555179; b1=.99332*b1+w*.0750759; b2=.969*b2+w*.153852; b3=.8665*b3+w*.3104856;
+        b4=.55*b4+w*.5329522; b5=-.7616*b5-w*.016898;
+        d[i] = (b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11; b6 = w*.115926;
+      }
+    }
+  }
+  return bufCache[kind] = b;
+}
+
+// Per-sound toolkit: everything created via k.* is tracked and cleaned up on stop
+function kit(out) {
+  const k = { nodes:[], timers:[], alive:true };
+  k.loop = (fn, min, max) => { const go = () => { if (!k.alive) return; fn(); k.timers.push(setTimeout(go, min + Math.random()*(max-min))); }; k.timers.push(setTimeout(go, min)); };
+  k.src = (kind, offset=Math.random()*5) => { const s = ac.createBufferSource(); s.buffer = noiseBuf(kind); s.loop = true; s.start(0, offset); k.nodes.push(s); return s; };
+  k.f = (type, hz, q=.7) => { const n = ac.createBiquadFilter(); n.type = type; n.frequency.value = hz; n.Q.value = q; return n; };
+  k.g = v => { const n = ac.createGain(); n.gain.value = v; return n; };
+  k.lfo = (hz, depth, target) => { const o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = hz; g.gain.value = depth; o.connect(g); g.connect(target); o.start(); k.nodes.push(o); };
+  k.chain = (...n) => { for (let i = 0; i < n.length-1; i++) n[i].connect(n[i+1]); return n[n.length-1]; };
+  // short shaped burst of filtered noise (a drop / a crackle)
+  k.burst = (kind, hz, q, peak, dur, pan) => {
+    const s = ac.createBufferSource(); s.buffer = noiseBuf(kind);
+    const bp = k.f('bandpass', hz, q), g = ac.createGain(), p = ac.createStereoPanner(), t = ac.currentTime;
+    p.pan.value = pan;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t+.004); g.gain.exponentialRampToValueAtTime(.0001, t+dur);
+    s.connect(bp); bp.connect(g); g.connect(p); p.connect(out); s.start(t, Math.random()*8, dur+.05);
+  };
+  return k;
+}
+
+function thunder(k, out) {
+  const s = k.src('brown'), lp = k.f('lowpass', 90), g = ac.createGain(), t = ac.currentTime;
+  lp.frequency.setValueAtTime(70, t); lp.frequency.linearRampToValueAtTime(160, t+1.8); lp.frequency.linearRampToValueAtTime(60, t+7);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.8, t+1.4); g.gain.exponentialRampToValueAtTime(.001, t+7.5);
+  s.connect(lp); lp.connect(g); g.connect(out);
+  setTimeout(() => { try { s.stop(); } catch {} }, 8000);
+}
+
+function rainBed(k, out, depth) {
+  // pink noise, band-limited: warm "shhh", nothing above ~3 kHz
+  k.chain(k.src('pink'), k.f('highpass', 220), k.f('lowpass', depth.lp, .4), k.g(depth.bed), out);
+  k.lfo(.05, depth.bed*.15, out.gain);   // very slow swell
+}
+const rnd = (a, b) => a + Math.random()*(b-a);
+
+const SOUNDS = {
+  Rain(out, k) {
+    rainBed(k, out, { lp:3000, bed:.55 });
+    k.loop(() => k.burst('pink', rnd(1400, 3800), 2, rnd(.03, .1), rnd(.025, .06), rnd(-.9, .9)), 30, 140);
+  },
+  Storm(out, k) {
+    rainBed(k, out, { lp:2400, bed:.7 });
+    k.chain(k.src('brown'), k.f('lowpass', 140), k.g(.45), out);          // distant rumble bed
+    k.loop(() => k.burst('pink', rnd(1000, 3000), 1.5, rnd(.04, .14), rnd(.03, .07), rnd(-1, 1)), 20, 90);
+    k.loop(() => thunder(k, out), 6000, 22000);
+  },
+  Ocean(out, k) {
+    const lp = k.f('lowpass', 500, .5), g = k.g(.35);
+    k.chain(k.src('pink'), k.f('highpass', 60), lp, g, out);
+    k.lfo(.08, .25, g.gain); k.lfo(.08, 260, lp.frequency);
+    const lp2 = k.f('lowpass', 900, .5), g2 = k.g(.18);
+    k.chain(k.src('pink'), lp2, g2, out); k.lfo(.05, .12, g2.gain);
+  },
+  Wind(out, k) {
+    const bp = k.f('bandpass', 380, .9), g = k.g(.9);
+    k.chain(k.src('pink'), bp, g, out);
+    k.lfo(.11, 180, bp.frequency); k.lfo(.06, .35, g.gain);
+  },
+  Fire(out, k) {
+    k.chain(k.src('brown'), k.f('lowpass', 450), k.g(.5), out);
+    k.loop(() => k.burst('pink', rnd(1800, 5000), 1.2, rnd(.05, .3), rnd(.006, .03), rnd(-.8, .8)), 50, 380);
+  },
+  Brown(out, k) { k.chain(k.src('brown'), k.f('lowpass', 1200), k.g(.55), out); },
+  Pink(out, k)  { k.chain(k.src('pink'), k.f('lowpass', 4000), k.g(.5), out); },
+};
+
+function stopCurrent() {
+  if (!current) return;
+  const c = current; current = null; c.k.alive = false; c.k.timers.forEach(clearTimeout);
+  c.out.gain.cancelScheduledValues(ac.currentTime); c.out.gain.setTargetAtTime(0, ac.currentTime, .15);   // fade, no click
+  setTimeout(() => { c.k.nodes.forEach(n => { try { n.stop(); } catch {} }); c.out.disconnect(); }, 1200);
+}
+function playSound(name) {
+  ensureAudio(); stopCurrent();
+  const off = name === currentName; currentName = off ? null : name;
+  document.querySelectorAll('#sounds button').forEach(b => b.classList.toggle('on', b.dataset.n === currentName));
+  if (off) return;
+  const out = ac.createGain(); out.gain.value = 0; out.gain.setTargetAtTime(1, ac.currentTime, .6); out.connect(master);   // fade in
+  const k = kit(out); SOUNDS[name](out, k); current = { out, k };
+}
+Object.keys(SOUNDS).forEach(n => {
+  const b = document.createElement('button'); b.dataset.n = n; b.textContent = n; b.onclick = () => playSound(n); $('sounds').appendChild(b);
+});
+$('vol').oninput = e => { if (master) master.gain.value = +e.target.value; };
+
+function chime() {   // gentle three-note bell
+  ensureAudio();
+  [523.25, 659.25, 783.99].forEach((f, i) => {
+    const o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime + i*.3;
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.22, t+.03); g.gain.exponentialRampToValueAtTime(.001, t+1.8);
+    o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+1.9);
+  });
+}
+
+// ---------- YouTube ----------
+const ytId = u => (u.match(/(?:v=|youtu\.be\/|embed\/|live\/|shorts\/)([\w-]{11})/) || [])[1];
+$('ytGo').onclick = () => {
+  const id = ytId($('ytUrl').value.trim());
+  if (!id) return alert('Could not read that YouTube link.');
+  if (location.protocol === 'file:') alert('YouTube refuses to play from file:// (error 153). Run ./serve.sh and open http://localhost:8765 instead.');
+  const f = $('yt'); f.style.display = 'block'; f.referrerPolicy = 'strict-origin-when-cross-origin';
+  f.src = `https://www.youtube.com/embed/${id}?autoplay=1&loop=1&playlist=${id}`;
+};
+$('ytStop').onclick = () => { $('yt').src = ''; $('yt').style.display = 'none'; };
+
+// ---------- Notes, filed per focus block ----------
+let notes = store.get('pp-notes', []);
+const saveNotes = () => store.set('pp-notes', notes);
+const curEntry = () => notes.find(x => x.id === curId);
+function ensureCur() {
+  let en = curEntry();
+  if (!en) { const b = blockInfo(); en = { id: Date.now(), day: localDay(), n: b.n, mins: b.mins, goal: '', text: '' }; notes.push(en); curId = en.id; }
+  return en;
+}
+function blockInfo() { const l = plan(); return { n: idx + 1, mins: l[Math.min(idx, l.length-1)] }; }
+function noteHead() {
+  const b = blockInfo(), g = $('goal').value.trim();
+  $('notehead').innerHTML = `Notes for <b>block ${b.n}</b> (${b.mins}m ${phase === 'work' ? 'focus' : 'break'})`;
+  $('goalnav').textContent = g ? '· goal: ' + g : '';
+}
+function startNoteBlock() {            // a new focus block starts: archive the old box, start a fresh one
+  notes = notes.filter(hasContent); saveNotes();
+  curId = null; $('curnote').value = ''; $('goal').value = ''; renderLog();
+}
+$('curnote').oninput = e => {
+  const t = e.target.value;
+  const en = curEntry() || (t.trim() ? ensureCur() : null);
+  if (en) { en.text = t; saveNotes(); }
+  saveState();
+};
+$('goal').oninput = e => {
+  const g = e.target.value;
+  const en = curEntry() || (g.trim() ? ensureCur() : null);
+  if (en) { en.goal = g; saveNotes(); }
+  saveState(); noteHead();
+};
+function renderLog() {
+  const past = notes.filter(x => x.id !== curId && hasContent(x)).sort((a, b) => b.id - a.id);
+  if (!past.length) { $('log').innerHTML = '<p class="empty">Earlier blocks will be filed here.</p>'; return; }
+  let html = '', day = '';
+  for (const x of past) {
+    if (x.day !== day) { day = x.day; html += `<div class="day">${day}</div>`; }
+    html += `<div class="entry"><p class="notehead"><span><b>Block ${x.n}</b> &middot; ${x.mins}m` +
+            (x.goal ? ` &middot; <i>${esc(x.goal)}</i>` : '') + `</span>` +
+            `<button class="x" data-del="${x.id}" title="Delete this note">delete</button></p>` +
+            `<textarea data-id="${x.id}">${esc(x.text || '')}</textarea></div>`;
+  }
+  $('log').innerHTML = html;
+}
+$('log').oninput = e => { const en = notes.find(x => x.id === +e.target.dataset.id); if (en) { en.text = e.target.value; saveNotes(); } };
+$('log').onclick = e => {
+  const id = +e.target.dataset.del;
+  if (e.target.tagName !== 'BUTTON' || !id) return;
+  if (!confirm('Delete this note?')) return;
+  notes = notes.filter(x => x.id !== id); saveNotes(); renderLog();
+};
+$('copyNotes').onclick = async () => {
+  const all = notes.filter(hasContent).sort((a, b) => a.id - b.id); let md = '', day = '';
+  for (const x of all) {
+    if (x.day !== day) { day = x.day; md += `## ${day}\n\n`; }
+    md += `### Block ${x.n} (${x.mins}m)${x.goal ? ' — ' + x.goal : ''}\n\n${(x.text || '').trim()}\n\n`;
+  }
+  try { await navigator.clipboard.writeText(md.trim() + '\n'); $('copyNotes').textContent = 'Copied!'; }
+  catch { alert('Could not access the clipboard.'); }
+  setTimeout(() => $('copyNotes').textContent = 'Copy all as Markdown', 1500);
+};
+
+// ---------- Themes: light/dark mode, then a theme inside that mode ----------
+// [id, label, mode, window title, layout]
+const THEMES = [
+  ['classic',  'Classic Paper',       'light', 'Pomodoro.txt',          'paper'],
+  ['sakura',   'Sakura Notebook',     'light', 'Journal: Pomodoro',     'notebook'],
+  ['espresso', 'Espresso Café',       'light', 'Café Timer',            'paper'],
+  ['ocean',    'Ocean Postcard',      'light', 'Greetings from Focus',  'postcard'],
+  ['platinum', 'Platinum (Mac OS 9)', 'light', 'Pomodoro',              'mac'],
+  ['win95',    'Windows 95',          'light', 'POMODORO.EXE',          'win95'],
+  ['midnight', 'Midnight Paper',      'dark',  'Pomodoro (night)',      'paper'],
+  ['forest',   'Forest Cabin',        'dark',  'cabin / focus',         'paper'],
+  ['retro',    'Retro Terminal',      'dark',  'pomodoro --focus',      'terminal'],
+  ['synth',    "Synthwave '89",       'dark',  'NEON // POMODORO',      'window'],
+  ['lofi',     'Lo-fi Room',          'dark',  'lofi-study.app',        'window'],
+  ['glass',    'Glass Night',         'dark',  'Focus',                 'glass'],
+];
+let lastTheme = store.get('pp-last', { light: 'classic', dark: 'midnight' });
+
+function fillThemes(m) {
+  const sel = $('theme'); sel.innerHTML = '';
+  THEMES.filter(t => t[2] === m).forEach(([v, label]) => { const o = document.createElement('option'); o.value = v; o.textContent = label; sel.appendChild(o); });
+}
+function applyTheme(id) {
+  const th = THEMES.find(t => t[0] === id) || THEMES[0];
+  const r = document.documentElement;
+  r.dataset.theme = th[0]; r.dataset.layout = th[4]; r.dataset.mode = th[2];
+  $('wtitle').textContent = th[3];
+  $('theme').value = th[0];
+  document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.mode === th[2]));
+  lastTheme[th[2]] = th[0]; store.set('pp-last', lastTheme);
+}
+function setMode(m) {
+  store.set('pp-mode', m); fillThemes(m);
+  applyTheme(lastTheme[m] || THEMES.find(t => t[2] === m)[0]);
+}
+document.querySelectorAll('.seg button').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+$('theme').onchange = e => applyTheme(e.target.value);
+
+// ---------- Init ----------
+{   // work out the starting mode: saved mode, else migrate older choices, else follow the system
+  let mode = store.get('pp-mode', null);
+  const legacyTheme = store.get('pp-theme2', null);
+  if (!mode && legacyTheme) { const t = THEMES.find(x => x[0] === legacyTheme); if (t) { mode = t[2]; lastTheme[mode] = legacyTheme; } }
+  if (!mode) { const old = store.get('pp-theme', null); mode = old ? (old === 'dark' ? 'dark' : 'light') : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
+  setMode(mode);
+}
+const cur0 = curEntry();
+if (cur0) { $('curnote').value = cur0.text || ''; $('goal').value = cur0.goal || ''; } else curId = null;
+showToday(); renderWeek();
+setPhase('work', true);
+</script>
+</body>
+</html>
